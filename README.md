@@ -18,11 +18,7 @@ Suivi des expériences : MLflow
 Données : Chest X-Ray Images (Pneumonia) - Kaggle
 
 ## 📁 Structure du Projet
-bash
-Copier
-Modifier
-chest-xray-pneumonia/
-│
+
 ├── data/                   # Données (train, val, test)
 ├── notebooks/              # Notebooks Jupyter pour l'exploration et le prototypage
 ├── models/                 # Modèles sauvegardés
@@ -43,8 +39,11 @@ Gérer les versions des modèles
 
 Pour lancer l’interface graphique de MLflow :
 
+Taper
 
 mlflow ui
+
+
 Puis ouvrez http://localhost:5000 dans votre navigateur.
 
 ## 🚀 Lancement du projet
