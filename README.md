@@ -16,6 +16,7 @@ Modèles pré-entraînés : ResNet50, DenseNet121, etc.
 Suivi des expériences : MLflow
 
 Données : Chest X-Ray Images (Pneumonia) - Kaggle
+https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia/data
 
 ## 📁 Structure du Projet
 
