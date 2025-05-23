@@ -1,3 +1,7 @@
 .venv
 data
 mlruns
+notebook/mlruns
+main_VGG_mlflow.ipynb
+main_DenseNet.ipynb
+models/model_vgg16
