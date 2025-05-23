@@ -1,4 +1,5 @@
-# 🩺 Détection de Pneumonie sur Radiographies Thoraciques avec Transfer Learning et MLflow
+# 🩺 Détection de Pneumonie sur Radiographies Thoraciques utilisant le Transfer Learning (à partir de modèles pré-entraînés de type CNN) et MLflow
+
 ## 🧠 Présentation du Projet
 Ce projet vise à développer un modèle d’apprentissage profond capable de classifier automatiquement des radiographies thoraciques en deux catégories : Pneumonie et Normal. Il s’appuie sur des techniques de transfer learning avec des réseaux de neurones convolutifs pré-entraînés pour améliorer les performances et accélérer l'entraînement. Le suivi des expériences est assuré par MLflow, ce qui facilite la reproductibilité et la gestion des versions du modèle.
 
@@ -20,14 +21,16 @@ https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia/data
 
 ## 📁 Structure du Projet
 
-├── data/                   # Données (train, val, test)
+├── data/                   # Données (train, val, test) (ignored)
+
+├── figures/                 # Matrice de confusion, courbes, métriques (ignored)
 
 ├── notebooks/              # Notebooks Jupyter pour l'exploration et le prototypage
 
 ├── models/                 # Modèles sauvegardés
 
 
-├── mlruns/                 # Répertoire utilisé par MLflow
+├── mlruns/                 # Répertoire utilisé par MLflow (ignored)
 
 
 ├── requirements.txt        # Dépendances du projet
@@ -56,15 +59,22 @@ mlflow ui
 Puis ouvrez http://localhost:5000 dans votre navigateur.
 
 ## 🚀 Lancement du projet
+
 1. Cloner le dépôt :
 
 git clone https://github.com/CSAADZIDI/DL_TransferLearning_CNN.git
 
-2. Installer les dépendances :
+2. Changer de répertoire
+
+cd DL_TransferLearning_CNN
+
+3. Noublier pas de crèer l'environnment virtuel
+
+3. Installer les dépendances :
 
 pip install -r requirements.txt
 
-3. Entraîner et Évaluer le modèle :
+3. Tester le modèle avec les données à télécharger de Kaggle (https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia/data)
 
 
 
@@ -73,7 +83,6 @@ Les performances obtenues ont été atteintes grâce au transfert d’apprentiss
 ## 📌 Pistes d’amélioration
 
 Déploiement d’une API REST (FastAPI ou Flask)
-
 
 Combinaison de plusieurs modèles (ensemble learning)
 
