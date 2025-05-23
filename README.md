@@ -20,11 +20,23 @@ https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia/data
 
 ## 📁 Structure du Projet
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 14a47a5 (updating README)
 ├── data/                   # Données (train, val, test)
+
 ├── notebooks/              # Notebooks Jupyter pour l'exploration et le prototypage
+
 ├── models/                 # Modèles sauvegardés
+
+
 ├── mlruns/                 # Répertoire utilisé par MLflow
+
+
 ├── requirements.txt        # Dépendances du projet
+
+
 └── README.md               # Présentation du projet
 
 ## 🧪 Suivi des expériences avec MLflow
