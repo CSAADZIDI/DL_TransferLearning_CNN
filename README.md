@@ -9,9 +9,9 @@ La pneumonie est une infection grave des poumons qui peut mettre la vie en dange
 
 Langage de programmation : Python
 
-Framework Deep Learning : TensorFlow ou PyTorch
+Framework Deep Learning : TensorFlow 
 
-Modèles pré-entraînés : ResNet50, DenseNet121, etc.
+Modèles pré-entraînés : VGG16, DenseNet121, etc.
 
 Suivi des expériences : MLflow
 
@@ -48,7 +48,7 @@ Gérer les versions des modèles
 
 Pour lancer l’interface graphique de MLflow :
 
-Taper
+Ecrire dans le terminal:
 
 mlflow ui
 
