@@ -10,3 +10,5 @@ pydot
 streamlit
 pyttsx3
 gtts
+uvicorn
+fastapi
