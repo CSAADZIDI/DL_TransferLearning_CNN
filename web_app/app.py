@@ -16,9 +16,9 @@ tf.get_logger().setLevel('ERROR')
 
 
 # Load your model (update this path)
-model = tf.keras.models.load_model("../models/my_model_densenet.keras")
+model = tf.keras.models.load_model("../models/model_densenet.keras")
 
-# Set last conv layer name for DenseNet121; change if using ResNet or others
+# Set last conv layer name for DenseNet121
 last_conv_layer_name = "conv5_block16_concat"  # DenseNet121 example
 
 # Grad-CAM function
@@ -64,14 +64,14 @@ def speak_web(message):
     os.remove("message.mp3")
 
 # Streamlit UI
-st.title("🩺 Pneumonia Detection with Grad-CAM & Voice Feedback")
+st.title("🩺 Détection de Pneumonie sur Radiographies Thoraciques (avec Grad-CAM & Rétroaction vocale)")
 
-uploaded_file = st.file_uploader("Upload a Chest X-ray", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Choisir une image radiographie thoracique", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     # Load and show image
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded X-ray", use_container_width=True)
+    st.image(image, caption="Image chargée", use_container_width=True)
 
     # Preprocess for model
     img = np.array(image)
@@ -87,12 +87,12 @@ if uploaded_file is not None:
     st.write(f"### Prediction: `{label}`")
     st.write(f"Confidence: `{confidence:.2f}`")
 
-    message = f"The diagnosis is {label} with {confidence:.0%} confidence."
+    message = f"Le diagnostic est {label} avec {confidence:.0%} confiance."
 
     # Diagnostic Report Section
-    st.markdown("## 📋 Diagnostic Report")
+    st.markdown("## 📋 Diagnostic")
     st.markdown(f"**Diagnosis:** `{label}`")
-    st.markdown(f"**Confidence:** `{confidence:.2%}`")
+    st.markdown(f"**Confiance:** `{confidence:.2%}`")
     # Vocal feedback (local + web)
     speak_local(message)  # Works offline on your machine
     speak_web(message)    # Plays audio in browser (works in cloud)
@@ -100,14 +100,11 @@ if uploaded_file is not None:
     # Explanation text to help verify correctness
     if label == "PNEUMONIA":
         attention_text = (
-            "⚠️ The model strongly activated in areas that may correspond to "
-            "infiltrates or lung opacities — commonly associated with pneumonia."
+            "⚠️ Le modèle s'est fortement activé dans des zones pouvant correspondre à des «infiltrats ou à des opacités pulmonaires»," 
+            "généralement associées à une pneumonie."
         )
-    else:
-        attention_text = (
-            "✅ The model did not highlight regions typically indicative of pneumonia."
-        )
-    st.markdown(f"**AI Attention Analysis:** {attention_text}")
+  
+    st.markdown(f"** {attention_text} **")
 
     # Grad-CAM heatmap visualization
     heatmap = get_gradcam_heatmap(model, img_input, last_conv_layer_name)
@@ -115,9 +112,9 @@ if uploaded_file is not None:
 
     col1, col2 = st.columns(2)
     with col1:
-        st.image(image, caption="Original X-ray", use_container_width=True)
+        st.image(image, caption="Originale X-ray", use_container_width=True)
     with col2:
-        st.image(overlayed, caption="Grad-CAM Heatmap", use_container_width=True)
+        st.image(overlayed, caption="Zones Grad-CAM Heatmap", use_container_width=True)
 
 
 

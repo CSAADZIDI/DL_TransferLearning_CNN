@@ -7,7 +7,7 @@ import io
 import uvicorn
 
 app = FastAPI()
-model = load_model('../models/mu_model_densenet.keras')
+model = load_model('../models/my_model_densenet.keras')
 
 def preprocess_image(image_bytes):
     image = Image.open(io.BytesIO(image_bytes)).convert('RGB')  # garder 3 canaux
