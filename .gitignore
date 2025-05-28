@@ -2,6 +2,6 @@
 data
 mlruns
 notebook/mlruns
-main_VGG_mlflow.ipynb
+main_VGG_mlflow_first_test.ipynb
 main_DenseNet.ipynb
 

@@ -71,7 +71,7 @@ uploaded_file = st.file_uploader("Choisir une image radiographie thoracique", ty
 if uploaded_file is not None:
     # Load and show image
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Image chargée", use_container_width=True)
+    st.image(image, caption="Image chargée", width=200)
 
     # Preprocess for model
     img = np.array(image)
@@ -80,12 +80,12 @@ if uploaded_file is not None:
     img_input = np.expand_dims(img_norm, axis=0)
 
     # Prediction
-    prediction = model.predict(img_input)[0][0]
-    label = "PNEUMONIA" if prediction > 0.5 else "NORMAL"
-    confidence = prediction if prediction > 0.5 else 1 - prediction
+    prediction_proba = model.predict(img_input)[0][0]
+    label = "PNEUMONIA" if prediction_proba > 0.5 else "NORMAL"
+    confidence = float(np.max(prediction_proba))
 
-    st.write(f"### Prediction: `{label}`")
-    st.write(f"Confidence: `{confidence:.2f}`")
+    #st.write(f"### Prediction: `{label}`")
+    #st.write(f"Confidence: `{confidence:.2f}`")
 
     message = f"Le diagnostic est {label} avec {confidence:.0%} confiance."
 
