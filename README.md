@@ -148,7 +148,8 @@ Puis ouvrez http://localhost:5000 dans votre navigateur.
 4. Ce projet contient 3 notebooks:
     - main_transfer_learning.ipynb : pour tester essentiellement 3 modèles selectionnés selon leurs performances (VGG16, DenseNet121, ResNet50v2)
     - main_concat_ensemble.ipynb : pour tester ensemble learning (concatenation de 2 modèles: DenseNet121 et ResNet50v2 )
-    - main_avg__ensemble.ipynb : pour tester ensemble learning (moyennage de 2 modèles: DenseNet121 et ResNet50v2 )
+    - main_avg_ensemble.ipynb : pour tester ensemble learning (moyennage de 2 modèles: DenseNet121 et ResNet50v2 )
+     - main_DenseNet.ipynb : pour entrainer le modèle final basé sur DenseNet121
 
 5. Tester le projet via l'interface fournie en utilisant **Streamlit** ou via l'**API**.
 
