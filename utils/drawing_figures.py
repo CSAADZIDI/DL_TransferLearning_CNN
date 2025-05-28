@@ -85,6 +85,7 @@ def draw_train_val_acc_loss(history,path):
     mlflow.log_artifact(os.path.join(path,"training_val_curves.png"))
     plt.show()
 
+
 def draw_accuracy_train_val_test(model,history, X_test,y_test,dual:bool, path):
     """draw model accuracy train vs val vs test
     """
