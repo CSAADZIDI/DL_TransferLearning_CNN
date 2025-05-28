@@ -35,7 +35,8 @@ def load_models(models_path):
     Args:
         models_path (str): models folder
     Returns:
-        models_list (list): models lists
+        model_list (list): models lists
+        model_names (list): models names
     """
     model_list = []
     model_names = []
@@ -45,6 +46,8 @@ def load_models(models_path):
             try:
                 model = load_model(file_path)
                 model_name = os.path.splitext(os.path.basename(file_path))[0]
+                model_parts = model_name.split('_')         # ['my', 'model', 'ensemble', 'cnn', 'lstm']
+                model_name = ' '.join(model_parts[1:])
                 if "dual" in model_name:
                     print("dual")
                 print(model_name)

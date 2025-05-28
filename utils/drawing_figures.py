@@ -1,9 +1,10 @@
 import seaborn as sns
-from sklearn.metrics import confusion_matrix, roc_auc_score,auc, roc_curve
+from sklearn.metrics import confusion_matrix, roc_auc_score,auc, roc_curve,accuracy_score
 import matplotlib.pyplot as plt
 import mlflow
 import os
 import sys
+import numpy as np
 from .functions_model import load_models
 from .functions_data import get_data
 def draw_confusion_matrix(y_test, y_pred,path:str):
@@ -116,24 +117,63 @@ def draw_models_acc(models_path, figures_path, X_test,y_test):
     """
     models = []
     test_accuracies =[]
+    models_avg = []
     # load models
     
     models,labels = load_models(models_path)
     print("models loaded")
+    print("labels",labels)
     for model,label in zip(models,labels):
+        print("label",label)
         if "dual" in label:
             print("dual model",model, "label",label)
             test_loss, test_acc = model.evaluate([X_test,X_test], y_test, verbose=0)
+        elif ("densenet" in label) or ("resnet" in label):
+            models_avg.append(model)
+            print(" for average ")
+            test_loss, test_acc = model.evaluate(X_test, y_test, verbose=0)
         else:
             test_loss, test_acc = model.evaluate(X_test, y_test, verbose=0)
         test_accuracies.append(test_acc)
     
+    # for the ensemble learning using average
+    print("len",len(models_avg))
+    # Predict on test data
+    preds1 = models_avg[0].predict(X_test)
+    preds2 = models_avg[1].predict(X_test)
+
+    # Average predictions
+    ensemble_preds = (preds1+preds2) / 2
+    ensemble_preds_binary = (ensemble_preds > 0.5).astype(int)
+
+
+    # Compute ensemble accuracy
+    ensemble_accuracy = accuracy_score(y_test, ensemble_preds_binary)
+    test_accuracies.append(ensemble_accuracy)
+    labels.append("ensemble (avg)")
+    
+    
+    
     plt.figure(figsize=(6, 4))
-    plt.bar(labels, test_accuracies)
+    
+
+    
+    bars = plt.bar(labels, test_accuracies)
     plt.ylim(0, 1)  # Accuracy ranges from 0 to 1
+    #plt.yticks(np.arange(0, 1.05, 0.05))  # More precise tick marks (every 0.05)
     plt.title('Model Comparison')
     plt.ylabel('Accuracy')
-    plt.grid(axis='y')
+    plt.xticks(rotation=45, ha='right')  # ha='right' aligns labels nicely
+    plt.grid(axis='y', color='gray', linestyle='--', linewidth=0.7)
+    # Ajouter les valeurs sur chaque barre
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(
+        bar.get_x() + bar.get_width() / 2,  # position horizontale (centre de la barre)
+        height + 0.02,                      # position verticale (un peu au-dessus de la barre)
+        f'{height:.2f}',                    # texte (valeur arrondie à 2 décimales)
+        ha='center', va='bottom'
+        )
     plt.tight_layout()
     plt.savefig(os.path.join(figures_path, "models_acc.png"))
     plt.show()

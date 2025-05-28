@@ -8,12 +8,12 @@ Les performances obtenues dans ce projet ont été atteintes grâce au transfert
 ## 📚 Sommaire
 
   - [🧠 Présentation du Projet](#-présentation-du-projet)
-  - [🧠 Choix du Modèle](#-choix-du-modèle)
+  - [🧠 Choix du Modèle et préparation des images](#-choix-du-modèle-et-préparation-des-images)
   - [🧰 Technologies utilisées](#-technologies-utilisées)
   - [📁 Structure du Projet](#-structure-du-projet)
   - [🧪 Suivi des expériences avec MLflow](#-suivi-des-expériences-avec-mlflow)
   - [🚀 Lancement du projet](#-lancement-du-projet)
-  - [🧪 Test du projet avec Streamlit](#-test-du-projet-avec-streamlit)
+  - [🖼️ Test du projet avec Streamlit](#-test-du-projet-avec-streamlit)
   - [🧪 Test du projet via une API](#-test-du-projet-via-une-api)
   - [📌 Pistes d’amélioration](#-pistes-damélioration)
   - [🤝 Contributions](#-contributions)
@@ -45,11 +45,16 @@ Pour assurer la traçabilité des expériences, la reproductibilité des résult
 - **MLflow Registry** pour le versioning et la gestion du cycle de vie des modèles.
 
 
-## 🧠 Choix du Modèle
+## 🧠 Choix du Modèle et préparation des images
 
-Parmi les différents modèles testés (VGG16, DenseNet121, ResNet50v2, Ensemble de modèles), nous avons sélectionné celui offrant le meilleur compromis entre précision, robustesse et temps d’inférence pour l’intégration dans l’application.
-Ce modèle est ensuite utilisé comme modèle final pour le déploiement via l’interface Streamlit.
+Parmi les différents modèles testés (VGG16, DenseNet121, ResNet50v2, Ensemble de modèles, ...), nous avons sélectionné DenseNet121 qui offre le meilleur compromis entre exactitude, robustesse et temps d’inférence pour l’intégration dans l’application.
+Ce modèle est ensuite utilisé comme modèle final pour le déploiement via l’interface Streamlit. La figure suivante présente une comparaison entre les meilleurs modèles testés, parmi lesquels DenseNet121 se démarque comme le plus performant en terme d'exactitude(accuracy) sur les données de test.
 
+<img src="figures/model_comparaison.png" height="400" width="440"/>
+
+
+
+Afin de rendre les images compatibles avec les modèles de préentraînés comme DenseNet121, qui attendent une entrée en trois canaux (RGB), les images sont converties en image couleur avec cv2.cvtColor, chaque canal contenant les mêmes valeurs issues du niveau de gris. Ensuite, les images sont redimensionnées à 224x224 pixels à l’aide de cv2.resize, une taille standard d’entrée pour la plupart des architectures convolutionnelles.
 
 
 ## 🧰 Technologies utilisées
@@ -67,7 +72,10 @@ Données : Chest X-Ray Images (Pneumonia)
 
 ## 📁 Structure du Projet
 
+├── api/                   # Fast API app pour tester le projet
+
 ├── data/                   # Données (train, val, test) (ignored)
+
 
 ├── figures/                 # Matrice de confusion, courbes, métriques
 
@@ -75,7 +83,11 @@ Données : Chest X-Ray Images (Pneumonia)
 
 └── mlruns/             # Répertoire utilisé par MLflow 
 
+├── utils/                 # Fonctions utiles en python
+
 ├── models/                 # Modèles sauvegardés
+
+├── web_app/                 # Streamlit GUI + Grad_CAM
 
 ├── requirements.txt        # Dépendances du projet
 
@@ -91,6 +103,18 @@ Enregistrer les hyperparamètres et artefacts
 Comparer les différents essais
 
 Gérer les versions des modèles
+
+Tout cela peut se faire automatiquement en utilisant:
+
+`` mlflow.tensorflow.autolog() ``
+
+Spécifier le nom de l'expérimentation : Experiment_Name
+
+`` mlflow.set_experiment("Experiment_Name")``
+
+et le nom de run : Run_Name
+
+`` mlflow.start_run(run_name="Run_Name"):  ``
 
 Pour lancer l’interface graphique de MLflow :
 
@@ -119,13 +143,18 @@ Puis ouvrez http://localhost:5000 dans votre navigateur.
 
 ``pip install -r requirements.txt``
 
->Assurez-vous d'avoir Python 3.10
+>Assurez-vous d'avoir Python 3.10 ou le télécharger. Voilà le lien : *https://www.python.org/downloads/release/python-3100/*
 
-4. Tester le projet via l'interface fournie en utilisant **Streamlit** ou via l'**API**.
+4. Ce projet contient 3 notebooks:
+    - main_transfer_learning.ipynb : pour tester essentiellement 3 modèles selectionnés selon leurs performances (VGG16, DenseNet121, ResNet50v2)
+    - main_concat_ensemble.ipynb : pour tester ensemble learning (concatenation de 2 modèles: DenseNet121 et ResNet50v2 )
+    - main_avg__ensemble.ipynb : pour tester ensemble learning (moyennage de 2 modèles: DenseNet121 et ResNet50v2 )
+
+5. Tester le projet via l'interface fournie en utilisant **Streamlit** ou via l'**API**.
 
 
 
-## 🧪 Test du projet avec Streamlit
+## 🖼️ Test du projet avec Streamlit
 
 **Streamlit** est un framework Python open-source qui permet de créer facilement et rapidement des applications web interactives pour visualiser et déployer des projets de data science et de machine learning. Pour tester le projet:
 
@@ -145,7 +174,7 @@ Une réponse sera affichée s'il s'agit d'une pneumonie ou non.
 
 Pour expliquer le modèle, nous fournissons à l’expert une image mettant en évidence les zones les plus influentes dans sa décision. Dans ce projet, nous utilisons **Grad-CAM** (Gradient-weighted Class Activation Mapping). Grad-CAM est une technique d’explicabilité pour les réseaux de neurones convolutifs utilisant les gradients des scores de classe par rapport aux activations des dernières couches convolutives, produisant ainsi une carte de chaleur superposée à l’image d’origine pour montrer où le modèle "regarde".
 
-<img src="img/stream_gui.png" /> 
+<img src="img/streamlit_gui.png" /> 
 
 
 ## 🧪 Test du projet via une API 
@@ -190,3 +219,5 @@ Extension à la classification multi-classes de la pneumonie
 
 ## 🤝 Contributions
 Les contributions sont les bienvenues ! N’hésitez pas à ouvrir une issue ou à soumettre une pull request.
+
+>I really enjoyed this project. There’s still so much to improve and explore, and I’m excited to keep going — come join me and enjoy!!
