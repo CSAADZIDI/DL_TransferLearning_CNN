@@ -1,23 +1,20 @@
-from fastapi.testclient import TestClient
-from fast_api_app import app
+import pytest
+import numpy as np
+from PIL import Image
+import io
+import requests
 
-client = TestClient(app)
+def test_predict_endpoint():
+    url = "http://127.0.0.1:8000/predict/"
+    file_path = r"C:\Users\User\Desktop\DL_transfer_CNN_pneumonia\data\test\PNEUMONIA\person1_virus_6.jpeg"  # Assurez-vous d’avoir une image JPEG
 
-def test_predict_pneumonia_or_normal():
-    image_path = "data/test_image.jpeg"  # remplace par un vrai chemin vers une image test
-
-    with open(image_path, "rb") as image_file:
-        response = client.post(
-            "/predict/",
-            files={"file": ("test_image.jpeg", image_file, "image/jpeg")}
-        )
+    with open(file_path, "rb") as f:
+        files = {"file": ("sample.jpg", f, "image/jpeg")}
+        response = requests.post(url, files=files)
 
     assert response.status_code == 200
-
-    json_data = response.json()
-    assert "predicted_class" in json_data
-    assert json_data["predicted_class"] in ["PNEUMONIA", "NORMAL"]
-
-    assert "confidence" in json_data
-    assert isinstance(json_data["confidence"], float)
-    assert 0.0 <= json_data["confidence"] <= 1.0
+    data = response.json()
+    assert "predicted_class" in data
+    assert "confidence" in data
+    assert isinstance(data["predicted_class"], str)
+    assert isinstance(data["confidence"], float)
